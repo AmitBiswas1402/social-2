@@ -13,18 +13,25 @@ import { Input } from "@/components/ui/input";
 import { SignupValidation } from "@/lib/validation";
 import { z } from "zod";
 import { Link } from "react-router-dom";
+import { createUserAccount } from "@/lib/appwrite/api";
 
 function SignupForm() {
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
+      name: "",
       username: "",
+      email: "",
+      password: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof SignupValidation>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof SignupValidation>) {
+    const newUser = await createUserAccount(values);
+
+    console.log(newUser);    
   }
+  
   return (
     <div>
       <Form {...form}>
@@ -45,7 +52,7 @@ function SignupForm() {
         >
           <FormField
             control={form.control}
-            name="username"
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="shad-form_label">Name</FormLabel>
@@ -99,7 +106,9 @@ function SignupForm() {
             )}
           />
 
-          <Button type="submit" className="shad-input_primary">Submit</Button>
+          <Button type="submit" className="shad-button_primary">
+            Sign up 
+          </Button>
 
           <p className="text-small-regular text-light-2 text-center mt-2">
             Already have an account?
