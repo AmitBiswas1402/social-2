@@ -14,14 +14,17 @@ import { Input } from "@/components/ui/input";
 import { SignupValidation } from "@/lib/validation";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserAccount } from "@/lib/appwrite/api";
+import { createUserAccount, signInAccount } from "@/lib/appwrite/api";
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
+import Loader from "@/components/shared/Loader";
 
 function SignupForm() {
   const {toast} = useToast();
   const navigate = useNavigate();
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+
+  // const {mutateAsync: createUserAccount, isPending: isSigningInUser} = useCreateUserAccount();
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -33,8 +36,9 @@ function SignupForm() {
     },
   });
 
-  const { mutateAsync: createUserAccount } = useCreateUserAccount();
-  const { mutateAsync: signInAccount } = useSignInAccount();
+  // Queries
+  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
+  // const { mutateAsync: signInAccount, isLoading: isSigningInUser } = useSignInAccount();
 
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     const newUser = await createUserAccount(values);
@@ -142,7 +146,12 @@ function SignupForm() {
           />
 
           <Button type="submit" className="shad-button_primary">
-            Sign up 
+            {isCreatingAccount ? 
+            (
+              <div className="flex-center gap-2">
+                <Loader />                
+              </div>
+            ) : "Sign up"}
           </Button>
 
           <p className="text-small-regular text-light-2 text-center mt-2">
