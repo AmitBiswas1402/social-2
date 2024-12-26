@@ -37,8 +37,11 @@ function SigninForm() {
     },
   });
 
-  const handleSignin = async (user: z.infer<typeof SigninValidation>) => {
-    const session = await signInAccount(user);
+  const handleSignin = async (values: z.infer<typeof SigninValidation>) => {
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password,
+    });
 
     if (!session) {
       toast({ title: "Login failed. Please try again." });

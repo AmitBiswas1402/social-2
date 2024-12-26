@@ -14,17 +14,18 @@ import { Input } from "@/components/ui/input";
 import { SignupValidation } from "@/lib/validation";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
-import { createUserAccount, signInAccount } from "@/lib/appwrite/api";
+import { signInAccount } from "@/lib/appwrite/api";
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
-import { useUserContext } from "@/context/AuthContext";
 import Loader from "@/components/shared/Loader";
+import { useUserContext } from "@/context/AuthContext";
 
 function SignupForm() {
   const {toast} = useToast();
   const navigate = useNavigate();
-  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
-
-  // const {mutateAsync: createUserAccount, isPending: isSigningInUser} = useCreateUserAccount();
+  const {checkAuthUser, isLoading: isUserLoading} = useUserContext();
+  
+  const {mutateAsync: createUserAccount, isPending:isCreatingAccount} = useCreateUserAccount();
+  const {mutateAsync: signInAccount, isPending:isSigningIn} = useSignInAccount();
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
@@ -36,9 +37,7 @@ function SignupForm() {
     },
   });
 
-  // Queries
-  const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
-  // const { mutateAsync: signInAccount, isLoading: isSigningInUser } = useSignInAccount();
+  
 
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     const newUser = await createUserAccount(values);
