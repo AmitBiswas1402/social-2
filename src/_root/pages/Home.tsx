@@ -23,7 +23,7 @@ const Home = () => {
                 // <li>
                 //   {post.caption}
                 // </li>
-                <PostCard />
+                <PostCard post={post} />
               ))}
             </ul>
           )}
