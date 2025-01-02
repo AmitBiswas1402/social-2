@@ -25,7 +25,7 @@ type PostFormProps = {
   action: "Create" | "Update";
 };
 
-const PostForm = ({ post }: PostFormProps) => {
+const PostForm = ({ post, actions }: PostFormProps) => {
   const { mutateAsync: createPost, isPending: isLoadingCreate } =
     useCreatePost();
   const { user } = useUserContext();
@@ -56,6 +56,8 @@ const PostForm = ({ post }: PostFormProps) => {
 
     navigate('/')
   }
+
+  
 
   return (
     <Form {...form}>
