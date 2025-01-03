@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { SignupValidation } from "@/lib/validation";
 import { z } from "zod";
 import { Link, useNavigate } from "react-router-dom";
-import { signInAccount } from "@/lib/appwrite/api";
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
 import Loader from "@/components/shared/Loader";
 import { useUserContext } from "@/context/AuthContext";
@@ -22,10 +21,10 @@ import { useUserContext } from "@/context/AuthContext";
 function SignupForm() {
   const {toast} = useToast();
   const navigate = useNavigate();
-  const {checkAuthUser, isLoading: isUserLoading} = useUserContext();
+  const {checkAuthUser} = useUserContext();
   
   const {mutateAsync: createUserAccount, isPending:isCreatingAccount} = useCreateUserAccount();
-  const {mutateAsync: signInAccount, isPending:isSigningIn} = useSignInAccount();
+  const {mutateAsync: signInAccount} = useSignInAccount();
 
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
