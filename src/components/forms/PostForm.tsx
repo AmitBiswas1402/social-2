@@ -20,7 +20,7 @@ import {
   useUpdatePost,
 } from "@/lib/react-query/queriesAndMutations";
 import { useUserContext } from "@/context/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import Loader from "../shared/Loader";
 
